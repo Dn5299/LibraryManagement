@@ -1,0 +1,31 @@
+.search{
+    width: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.add-book{
+    background-color: blue;
+    color: white;
+    font-size: 15px;
+    width: 150px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid white;
+    cursor: pointer;
+}
+.search-section{
+    display: flex;
+    gap: 30px;
+}
+
+.category{
+    width: 100px; 
+    border-radius: 10px;
+}
+
+.status{
+    width: 100px; 
+    border-radius: 10px;
+}
