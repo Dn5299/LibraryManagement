@@ -6,6 +6,7 @@
         <option>Tất cả</option>
         <option>Tiểu thuyết</option>
         <option>Khoa học</option>
+        <option>Truyện</option>
         </select>
 
         <select class = "status">
@@ -16,5 +17,10 @@
         </select>
 
         <button class = "add-book">+ Thêm sách</button>
+</div>
+
+<div *ngFor ="let book of books">
+    <h2>{{book.title}}</h2>
+    <p>{{book.author}}</p>
 
 </div>
