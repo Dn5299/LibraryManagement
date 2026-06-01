@@ -18,9 +18,34 @@
 
         <button class = "add-book">+ Thêm sách</button>
 </div>
+<br>
+<table class="table" border = "1">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Tên sách</th>
+            <th>Tác giả</th>
+            <th>Danh mục</th>
+            <th>Năm xuất bản</th>
+            <th>Số lượng</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let book of books">
+            <td>{{book.stt}}</td>
+            <td>{{book.title}}</td>
+            <td>{{book.author}}</td>
+            <td>{{book.category}}</td>
+            <td>{{book.year}}</td>
+            <td>{{book.quantity}}</td>
+            <td>{{book.status}}</td>
 
-<div *ngFor ="let book of books">
-    <h2>{{book.title}}</h2>
-    <p>{{book.author}}</p>
-
-</div>
+            <td>
+                <button (click) = "editBook(book)">Sửa</button>
+                <button (click) = "deleteBook(book)">Xóa</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

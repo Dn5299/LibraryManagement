@@ -10,5 +10,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('my-app');
+  h1 = "Website quản lý thư viện";
 
 }
