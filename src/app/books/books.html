@@ -16,7 +16,11 @@
         <option>Hết sách</option>
         </select>
 
-        <button class = "add-book">+ Thêm sách</button>
+        <button
+        class = "add-book"
+        (click) = "showAddForm = true">
+            + Thêm sách
+        </button>
 </div>
 <br>
 <table class="table" border = "1">
@@ -49,3 +53,74 @@
         </tr>
     </tbody>
 </table>
+<div
+  class="popup"
+  *ngIf="showAddForm"
+>
+
+  <h2>Thêm sách</h2>
+
+  <input
+    type="text"
+    placeholder="Tên sách"
+    [(ngModel)]="newTitle"
+  >
+
+  <br><br>
+
+  <input
+    type="text"
+    placeholder="Tác giả"
+    [(ngModel)]="newAuthor"
+  >
+
+  <br><br>
+  <input
+    type="text"
+    placeholder="Danh mục"
+    [(ngModel)]="newCategory"
+  >
+
+  <br><br>
+  <input
+    type="text"
+    placeholder="Năm xuất bản"
+    [(ngModel)]="newYear"
+  >
+
+  <br><br>
+  <input
+    type="text"
+    placeholder="Số lượng"
+    [(ngModel)]="newQuantity"
+  >
+
+  <br><br>
+  <input
+    type="text"
+    placeholder="Trạng thái"
+    [(ngModel)]="newStatus"
+  >
+
+  <br><br>
+
+  <div class="buttonAddBook">
+
+    <button (click)="addBook()">
+      Lưu
+    </button>
+
+    <button
+      (click)="showAddForm = false"
+    >
+      Đóng
+    </button>
+
+  </div>
+
+</div>
+<button (click)="getPosts()">
+
+  Test API
+
+</button>

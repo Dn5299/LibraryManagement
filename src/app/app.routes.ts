@@ -4,6 +4,7 @@ import { Books} from './books/books';
 import { Borrow } from './borrow/borrow';
 import { Statistical } from './statistical/statistical';
 import { Setting } from './setting/setting';
+import { AddBook } from './books/add-book/add-book';
 
 export const routes: Routes = [
     {
@@ -29,5 +30,9 @@ export const routes: Routes = [
     {
         path: 'setting',
         component: Setting
+    },
+    {
+        path: 'add-book',
+        component: AddBook
     }
 ];
