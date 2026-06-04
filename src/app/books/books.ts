@@ -1,87 +1,171 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-books',
   imports: [CommonModule, FormsModule],
   templateUrl: './books.html',
   styleUrls: ['./books.css']
-
 })
+
 export class Books {
-  constructor(private http: HttpClient) {}
+
   showAddForm = false;
+
+  searchText = '';
+
+  selectedBook: any = null;
+
+  books: any[] = [];
+
   newTitle = '';
   newAuthor = '';
   newCategory = '';
   newYear = '';
   newQuantity = '';
   newStatus = '';
-  books: any[] = [];
-  editBook(book: any){
-    console.log("Sửa sách", book)
+
+
+
+  ngOnInit() {
+
+    const data = localStorage.getItem('books');
+
+    if (data) {
+
+      this.books = JSON.parse(data);
+
+    }
+
   }
-  deleteBook(book: any){
-    console.log("Xóa sách", book)
+
+
+
+  saveToLocalStorage() {
+
+    localStorage.setItem(
+      'books',
+      JSON.stringify(this.books)
+    );
+
   }
-addBook() {
 
-  console.log(this.books);
 
-  this.books.push({
 
-    stt: this.books.length + 1,
+  resetForm() {
 
-    title: this.newTitle,
+    this.newTitle = '';
+    this.newAuthor = '';
+    this.newCategory = '';
+    this.newYear = '';
+    this.newQuantity = '';
+    this.newStatus = '';
 
-    author: this.newAuthor,
+  }
 
-    category: this.newCategory,
 
-    year: this.newYear,
 
-    quantity: this.newQuantity,
+  openAddForm() {
 
-    status: this.newStatus
+    this.showAddForm = true;
 
-  });
-  localStorage.setItem(
-  'books',
-  JSON.stringify(this.books)
-);
+    this.selectedBook = null;
 
-  console.log(this.books);
-  this.showAddForm = false;
+    this.resetForm();
+
+  }
+
+
+
+  editBook(book: any) {
+
+    this.showAddForm = true;
+
+    this.selectedBook = book;
+
+    this.newTitle = book.title;
+    this.newAuthor = book.author;
+    this.newCategory = book.category;
+    this.newYear = book.year;
+    this.newQuantity = book.quantity;
+    this.newStatus = book.status;
+
+  }
+
+
+
+  saveBook() {
+
+    if (this.selectedBook) {
+
+      this.selectedBook.title = this.newTitle;
+      this.selectedBook.author = this.newAuthor;
+      this.selectedBook.category = this.newCategory;
+      this.selectedBook.year = this.newYear;
+      this.selectedBook.quantity = this.newQuantity;
+      this.selectedBook.status = this.newStatus;
+
+    }
+
+    else {
+
+      const book = {
+
+        stt: this.books.length + 1,
+
+        title: this.newTitle,
+
+        author: this.newAuthor,
+
+        category: this.newCategory,
+
+        year: this.newYear,
+
+        quantity: this.newQuantity,
+
+        status: this.newStatus
+
+      };
+
+      this.books.push(book);
+
+    }
+
+    this.saveToLocalStorage();
+
+    this.resetForm();
+
+    this.showAddForm = false;
+
+    this.selectedBook = null;
+
+  }
+
+
+
+  deleteBook(book: any) {
+
+    this.books = this.books.filter(
+      b => b !== book
+    );
+
+    this.saveToLocalStorage();
+
+  }
+
+
+
+  getFilteredBooks() {
+
+    return this.books.filter(book =>
+
+      book.title
+        ?.toLowerCase()
+        .includes(this.searchText.toLowerCase())
+
+    );
+
+  }
+
 }
-getPosts() {
-
-  this.http
-    .get('https://jsonplaceholder.typicode.com/posts')
-
-    .subscribe((data: any) => {
-
-      this.books = data.map((item: any, index: number) => ({
-
-        stt: index + 1,
-
-        title: item.title,
-
-        author: item.body,
-
-        category: "API",
-
-        year: 2024,
-
-        quantity: 1,
-
-        status: "Có sẵn"
-
-      }));
-
-    });
-
-}
-}
-
