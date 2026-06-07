@@ -1,1 +1,148 @@
-<p>borrow works!</p>
+<h1>Mượn/Trả</h1>
+
+<div class="search-section">
+
+    <input
+        class="search"
+        type="text"
+        placeholder="Tìm kiếm tên độc giả"
+        [(ngModel)]="searchText"
+    >
+
+    <button
+        class="add-book"
+        (click)="openAddForm()"
+    >
+        + Thêm phiếu mượn
+    </button>
+
+</div>
+
+<br>
+
+<table class="table" border="1">
+
+    <thead>
+
+        <tr>
+
+            <th>ID</th>
+            <th>Tên độc giả</th>
+            <th>Tên sách</th>
+            <th>Ngày mượn</th>
+            <th>Ngày trả</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr *ngFor="let borrow of getFilteredBorrow()">
+
+            <td>{{borrow.id}}</td>
+            <td>{{borrow.readers}}</td>
+            <td>{{borrow.title}}</td>
+            <td>{{borrow.borrowd}}</td>
+            <td>{{borrow.returnd}}</td>
+            <td>{{borrow.note}}</td>
+
+            <td>
+
+                <button (click)="editBorrow(borrow)">
+                    Sửa
+                </button>
+
+                <button (click)="deleteBorrow(borrow)">
+                    Xóa
+                </button>
+
+            </td>
+
+        </tr>
+
+    </tbody>
+
+</table>
+
+
+
+<div
+    class="popup"
+    *ngIf="showAddForm"
+>
+
+    <h2>
+
+        {{ selectedBorrow ? 'Sửa phiếu mượn' : 'Thêm phiếu mượn' }}
+
+    </h2>
+
+
+
+    <input
+        type="text"
+        placeholder="Tên độc giả"
+        [(ngModel)]="newReaders"
+    >
+
+    <input
+        type="text"
+        placeholder="Tên sách"
+        [(ngModel)]="newTitle"
+    >
+
+    <input
+        type="text"
+        placeholder="Ngày mượn"
+        [(ngModel)]="newBorrowd"
+    >
+
+    <input
+        type="text"
+        placeholder="Ngày trả"
+        [(ngModel)]="newReturnd"
+    >
+
+
+
+    <select
+        class="status"
+        [(ngModel)]="newNote"
+    >
+
+        <option value="Đang mượn">
+
+            Đang mượn
+
+        </option>
+
+        <option value="Đã trả">
+
+            Đã trả
+
+        </option>
+
+    </select>
+
+
+
+    <div class="buttonAddBook">
+
+        <button (click)="saveBorrow()">
+
+            Lưu
+
+        </button>
+
+        <button (click)="showAddForm = false">
+
+            Đóng
+
+        </button>
+
+    </div>
+
+</div>
