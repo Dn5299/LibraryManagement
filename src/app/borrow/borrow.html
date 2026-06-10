@@ -26,7 +26,7 @@
 
         <tr>
 
-            <th>ID</th>
+            <th>CCCD/CMND</th>
             <th>Tên độc giả</th>
             <th>Tên sách</th>
             <th>Ngày mượn</th>
@@ -42,7 +42,7 @@
 
         <tr *ngFor="let borrow of getFilteredBorrow()">
 
-            <td>{{borrow.id}}</td>
+            <td>{{borrow.citizenId}}</td>
             <td>{{borrow.readers}}</td>
             <td>{{borrow.title}}</td>
             <td>{{borrow.borrowd}}</td>
@@ -53,10 +53,6 @@
 
                 <button (click)="editBorrow(borrow)">
                     Sửa
-                </button>
-
-                <button (click)="deleteBorrow(borrow)">
-                    Xóa
                 </button>
 
             </td>
@@ -86,6 +82,12 @@
         type="text"
         placeholder="Tên độc giả"
         [(ngModel)]="newReaders"
+    >
+
+    <input
+        type="text"
+        placeholder="Số căn cước"
+        [(ngModel)]="newCitizenId"
     >
 
     <input

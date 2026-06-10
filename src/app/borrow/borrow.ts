@@ -24,6 +24,7 @@ export class Borrow {
   newBorrowd = '';
   newReturnd = '';
   newNote = '';
+  newCitizenId = '';
 
 
 
@@ -59,6 +60,8 @@ export class Borrow {
     this.newBorrowd = '';
     this.newReturnd = '';
     this.newNote = '';
+    this.newCitizenId = '';
+    
 
   }
 
@@ -91,6 +94,8 @@ export class Borrow {
     this.newReturnd = borrow.returnd;
 
     this.newNote = borrow.note;
+    
+    this.newCitizenId = borrow.citizenId;
 
   }
 
@@ -130,7 +135,7 @@ export class Borrow {
 
       const borrow = {
 
-        id: 'DG' + Math.floor(Math.random() * 10000),
+        citizenId: this.newCitizenId,
 
         readers: this.newReaders,
 
@@ -189,23 +194,6 @@ export class Borrow {
     this.selectedBorrow = null;
 
   }
-
-
-
-  deleteBorrow(borrow: any) {
-
-    this.borrow = this.borrow.filter(
-
-      b => b !== borrow
-
-    );
-
-
-
-    this.saveToLocalStorage();
-
-  }
-
 
 
   getFilteredBorrow() {

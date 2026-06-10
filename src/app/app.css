@@ -1,24 +1,55 @@
 .h1{
-  color:red;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+
+    text-align: center;
+
+    color: red;
+
+    font-size: 50px;
+
+    margin-top: 20px;
+
 }
+
+
+
 .menu{
-  padding: 10px;
-  gap: 30px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 60px;
+
+    padding: 25px 0;
+
+    background-color: white;
+
+    border-bottom: 2px solid #dcdcdc;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
 }
-.menu a {
-  color: black;
-  font-size: 20px;
-  padding: 10px;
-  text-decoration: none;
+
+
+
+.menu a{
+
+    text-decoration: none;
+
+    color: black;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    transition: 0.3s;
+
 }
+
+
+
 .menu a:hover{
-  color: grey;
-  font-size: 19px;
+
+    color: red;
 
 }

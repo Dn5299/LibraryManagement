@@ -1,1 +1,46 @@
 <h1>Hệ thống quản lý thư viện</h1>
+
+<p>Xin chào quản trị viên</p>
+
+
+
+<div class="dashboard">
+
+    <div class="card">
+
+        <h2>Tổng sách</h2>
+
+        <p>{{books.length}}</p>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h2>Đang mượn</h2>
+
+        <p>{{getBorrowingCount()}}</p>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h2>Đã trả</h2>
+
+        <p>{{getReturnedCount()}}</p>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h2>Độc giả</h2>
+
+        <p>{{getReadersCount()}}</p>
+    </div>
+
+</div>
