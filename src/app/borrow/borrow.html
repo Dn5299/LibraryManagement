@@ -13,7 +13,7 @@
         class="add-book"
         (click)="openAddForm()"
     >
-        + Thêm phiếu mượn
+        + Phiếu mượn
     </button>
 
 </div>
@@ -25,7 +25,7 @@
     <thead>
 
         <tr>
-
+            <th>Mã phiếu</th>
             <th>CCCD/CMND</th>
             <th>Tên độc giả</th>
             <th>Tên sách</th>
@@ -41,7 +41,7 @@
     <tbody>
 
         <tr *ngFor="let borrow of getFilteredBorrow()">
-
+            <td>P{{ borrow.id.toString().padStart(4,'0') }}</td>
             <td>{{borrow.citizenId}}</td>
             <td>{{borrow.readers}}</td>
             <td>{{borrow.title}}</td>
@@ -50,6 +50,12 @@
             <td>{{borrow.note}}</td>
 
             <td>
+                <button
+                [disabled]="borrow.note === 'Đang mượn'"
+                (click)="deleteBorrow(borrow)"
+                >
+                    Xóa
+                </button>
 
                 <button (click)="editBorrow(borrow)">
                     Sửa

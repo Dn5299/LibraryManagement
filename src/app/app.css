@@ -1,55 +1,50 @@
-.h1{
-
-    text-align: center;
-
-    color: red;
-
-    font-size: 50px;
-
-    margin-top: 20px;
-
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: white;
 }
 
+.h1 {
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
 
-
-.menu{
-
+.menu {
     display: flex;
-
     justify-content: center;
+    gap: 25px;
 
-    gap: 60px;
-
-    padding: 25px 0;
+    padding: 15px;
 
     background-color: white;
-
-    border-bottom: 2px solid #dcdcdc;
-
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-
+    border-bottom: 1px solid #ddd;
 }
 
-
-
-.menu a{
+.menu a {
 
     text-decoration: none;
 
-    color: black;
+    color: #333;
 
-    font-size: 22px;
+    font-weight: 600;
 
-    font-weight: bold;
+    padding: 12px 24px;
+
+    background-color: #f5f5f5;
+
+    border-radius: 10px;
 
     transition: 0.3s;
-
 }
 
+.menu a:hover {
 
+    background-color: #3498db;
 
-.menu a:hover{
+    color: white;
 
-    color: red;
+    transform: translateY(-2px);
 
 }

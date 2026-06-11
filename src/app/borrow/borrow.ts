@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { supabase } from '../supabase';
 
 @Component({
   selector: 'app-borrow',
@@ -8,8 +9,9 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './borrow.html',
   styleUrls: ['./borrow.css']
 })
-
 export class Borrow {
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   showAddForm = false;
 
@@ -26,32 +28,25 @@ export class Borrow {
   newNote = '';
   newCitizenId = '';
 
+  async ngOnInit() {
 
+    const { data, error } = await supabase
+      .from('borrow')
+      .select('*');
 
-  ngOnInit() {
+    if (error) {
 
-    const data = localStorage.getItem('borrow');
+      console.log(error);
 
-    if (data) {
-
-      this.borrow = JSON.parse(data);
+      return;
 
     }
 
-  }
+    this.borrow = data || [];
 
-
-
-  saveToLocalStorage() {
-
-    localStorage.setItem(
-      'borrow',
-      JSON.stringify(this.borrow)
-    );
+    this.cdr.detectChanges();
 
   }
-
-
 
   resetForm() {
 
@@ -61,11 +56,8 @@ export class Borrow {
     this.newReturnd = '';
     this.newNote = '';
     this.newCitizenId = '';
-    
 
   }
-
-
 
   openAddForm() {
 
@@ -77,63 +69,32 @@ export class Borrow {
 
   }
 
-
-
   editBorrow(borrow: any) {
 
     this.showAddForm = true;
 
     this.selectedBorrow = borrow;
 
-    this.newReaders = borrow.readers;
-
-    this.newTitle = borrow.title;
-
-    this.newBorrowd = borrow.borrowd;
-
-    this.newReturnd = borrow.returnd;
-
-    this.newNote = borrow.note;
-    
     this.newCitizenId = borrow.citizenId;
+    this.newReaders = borrow.readers;
+    this.newTitle = borrow.title;
+    this.newBorrowd = borrow.borrowd;
+    this.newReturnd = borrow.returnd;
+    this.newNote = borrow.note;
 
   }
 
+  async saveBorrow() {
 
+  if (this.selectedBorrow) {
 
-  saveBorrow() {
+    const oldStatus = this.selectedBorrow.note;
 
-    const data = localStorage.getItem('books');
+    const { error } = await supabase
 
-    const books = JSON.parse(data || '[]');
+      .from('borrow')
 
-    const foundBook = books.find(
-
-      (book: any) =>
-
-      book.title === this.newTitle
-
-    );
-
-
-
-    if (this.selectedBorrow) {
-
-      this.selectedBorrow.readers = this.newReaders;
-
-      this.selectedBorrow.title = this.newTitle;
-
-      this.selectedBorrow.borrowd = this.newBorrowd;
-
-      this.selectedBorrow.returnd = this.newReturnd;
-
-      this.selectedBorrow.note = this.newNote;
-
-    }
-
-    else {
-
-      const borrow = {
+      .update({
 
         citizenId: this.newCitizenId,
 
@@ -145,56 +106,167 @@ export class Borrow {
 
         returnd: this.newReturnd,
 
-        note: this.newNote,
+        note: this.newNote
 
-      };
+      })
 
+      .eq('id', this.selectedBorrow.id);
 
+    if (error) {
 
-      this.borrow.push(borrow);
+      console.log(error);
 
-    }
-
-
-
-    if (foundBook) {
-
-      if (this.newNote === 'Đang mượn') {
-
-        foundBook.quantity = Number(foundBook.quantity) - 1;
-
-      }
-
-      else if (this.newNote === 'Đã trả') {
-
-        foundBook.quantity = Number(foundBook.quantity) + 1;
-
-      }
+      return;
 
     }
 
+    const { data: books } = await supabase
 
+      .from('books')
 
-    localStorage.setItem(
+      .select('*')
 
-      'books',
+      .eq('title', this.newTitle);
 
-      JSON.stringify(books)
+    if (books && books.length > 0) {
 
-    );
+      const book = books[0];
 
+      if (
+        oldStatus === 'Đang mượn' &&
+        this.newNote === 'Đã trả'
+      ) {
 
+        await supabase
 
-    this.saveToLocalStorage();
+          .from('books')
 
-    this.resetForm();
+          .update({
 
-    this.showAddForm = false;
+            quantity: Number(book.quantity) + 1
 
-    this.selectedBorrow = null;
+          })
+
+          .eq('id', book.id);
+
+      }
+
+      if (
+        oldStatus === 'Đã trả' &&
+        this.newNote === 'Đang mượn'
+      ) {
+
+        await supabase
+
+          .from('books')
+
+          .update({
+
+            quantity: Number(book.quantity) - 1
+
+          })
+
+          .eq('id', book.id);
+
+      }
+
+    }
 
   }
 
+  else {
+
+    const { error } = await supabase
+
+      .from('borrow')
+
+      .insert([{
+
+        citizenId: this.newCitizenId,
+
+        readers: this.newReaders,
+
+        title: this.newTitle,
+
+        borrowd: this.newBorrowd,
+
+        returnd: this.newReturnd,
+
+        note: this.newNote
+
+      }]);
+
+    if (error) {
+
+      console.log(error);
+
+      return;
+
+    }
+
+    if (this.newNote === 'Đang mượn') {
+
+      const { data: books } = await supabase
+
+        .from('books')
+
+        .select('*')
+
+        .eq('title', this.newTitle);
+
+      if (books && books.length > 0) {
+
+        const book = books[0];
+
+        await supabase
+
+          .from('books')
+
+          .update({
+
+            quantity: Number(book.quantity) - 1
+
+          })
+
+          .eq('id', book.id);
+
+      }
+
+    }
+
+  }
+
+      this.resetForm();
+
+      this.showAddForm = false;
+
+      this.selectedBorrow = null;
+
+      await this.ngOnInit();
+
+}
+
+  async deleteBorrow(borrow: any) {
+
+    const { error } = await supabase
+
+      .from('borrow')
+
+      .delete()
+
+      .eq('id', borrow.id);
+
+    if (error) {
+
+      console.log(error);
+
+      return;
+
+    }
+
+    await this.ngOnInit();
+
+  }
 
   getFilteredBorrow() {
 
