@@ -27,6 +27,7 @@ export class Borrow {
   newReturnd = '';
   newNote = '';
   newCitizenId = '';
+  newQuantityBorrow = 1;
 
   async ngOnInit() {
 
@@ -56,6 +57,7 @@ export class Borrow {
     this.newReturnd = '';
     this.newNote = '';
     this.newCitizenId = '';
+    this.newQuantityBorrow = 1;
 
   }
 
@@ -81,130 +83,47 @@ export class Borrow {
     this.newBorrowd = borrow.borrowd;
     this.newReturnd = borrow.returnd;
     this.newNote = borrow.note;
+    this.newQuantityBorrow = borrow.quantityBorrow;
 
   }
 
   async saveBorrow() {
 
-  if (this.selectedBorrow) {
+    if (this.selectedBorrow) {
 
-    const oldStatus = this.selectedBorrow.note;
+      const oldStatus = this.selectedBorrow.note;
 
-    const { error } = await supabase
+      const { error } = await supabase
 
-      .from('borrow')
+        .from('borrow')
 
-      .update({
+        .update({
 
-        citizenId: this.newCitizenId,
+          citizenId: this.newCitizenId,
 
-        readers: this.newReaders,
+          readers: this.newReaders,
 
-        title: this.newTitle,
+          title: this.newTitle,
 
-        borrowd: this.newBorrowd,
+          borrowd: this.newBorrowd,
 
-        returnd: this.newReturnd,
+          returnd: this.newReturnd,
 
-        note: this.newNote
+          note: this.newNote,
 
-      })
+          quantityBorrow: Number(this.newQuantityBorrow)
 
-      .eq('id', this.selectedBorrow.id);
+        })
 
-    if (error) {
+        .eq('id', this.selectedBorrow.id);
 
-      console.log(error);
+      if (error) {
 
-      return;
+        console.log(error);
 
-    }
-
-    const { data: books } = await supabase
-
-      .from('books')
-
-      .select('*')
-
-      .eq('title', this.newTitle);
-
-    if (books && books.length > 0) {
-
-      const book = books[0];
-
-      if (
-        oldStatus === 'Đang mượn' &&
-        this.newNote === 'Đã trả'
-      ) {
-
-        await supabase
-
-          .from('books')
-
-          .update({
-
-            quantity: Number(book.quantity) + 1
-
-          })
-
-          .eq('id', book.id);
+        return;
 
       }
-
-      if (
-        oldStatus === 'Đã trả' &&
-        this.newNote === 'Đang mượn'
-      ) {
-
-        await supabase
-
-          .from('books')
-
-          .update({
-
-            quantity: Number(book.quantity) - 1
-
-          })
-
-          .eq('id', book.id);
-
-      }
-
-    }
-
-  }
-
-  else {
-
-    const { error } = await supabase
-
-      .from('borrow')
-
-      .insert([{
-
-        citizenId: this.newCitizenId,
-
-        readers: this.newReaders,
-
-        title: this.newTitle,
-
-        borrowd: this.newBorrowd,
-
-        returnd: this.newReturnd,
-
-        note: this.newNote
-
-      }]);
-
-    if (error) {
-
-      console.log(error);
-
-      return;
-
-    }
-
-    if (this.newNote === 'Đang mượn') {
 
       const { data: books } = await supabase
 
@@ -218,33 +137,156 @@ export class Borrow {
 
         const book = books[0];
 
-        await supabase
+        if (
+          oldStatus === 'Đang mượn' &&
+          this.newNote === 'Đã trả'
+        ) {
 
-          .from('books')
+          await supabase
 
-          .update({
+            .from('books')
 
-            quantity: Number(book.quantity) - 1
+            .update({
 
-          })
+              quantity:
+                Number(book.quantity) +
+                Number(this.newQuantityBorrow)
 
-          .eq('id', book.id);
+            })
+
+            .eq('id', book.id);
+
+        }
+
+        if (
+          oldStatus === 'Đã trả' &&
+          this.newNote === 'Đang mượn'
+        ) {
+
+          if (
+            Number(book.quantity) <
+            Number(this.newQuantityBorrow)
+          ) {
+
+            alert('Không đủ sách trong kho');
+
+            return;
+
+          }
+
+          await supabase
+
+            .from('books')
+
+            .update({
+
+              quantity:
+                Number(book.quantity) -
+                Number(this.newQuantityBorrow)
+
+            })
+
+            .eq('id', book.id);
+
+        }
 
       }
 
     }
 
+    else {
+
+      const { data: books } = await supabase
+
+        .from('books')
+
+        .select('*')
+
+        .eq('title', this.newTitle);
+
+      if (books && books.length > 0) {
+
+        const book = books[0];
+
+        if (
+          Number(book.quantity) <
+          Number(this.newQuantityBorrow)
+        ) {
+
+          alert('Không đủ sách trong kho');
+
+          return;
+
+        }
+
+      }
+
+      const { error } = await supabase
+
+        .from('borrow')
+
+        .insert([{
+
+          citizenId: this.newCitizenId,
+
+          readers: this.newReaders,
+
+          title: this.newTitle,
+
+          borrowd: this.newBorrowd,
+
+          returnd: this.newReturnd,
+
+          note: this.newNote,
+
+          quantityBorrow:
+            Number(this.newQuantityBorrow)
+
+        }]);
+
+      if (error) {
+
+        console.log(error);
+
+        return;
+
+      }
+
+      if (this.newNote === 'Đang mượn') {
+
+        if (books && books.length > 0) {
+
+          const book = books[0];
+
+          await supabase
+
+            .from('books')
+
+            .update({
+
+              quantity:
+                Number(book.quantity) -
+                Number(this.newQuantityBorrow)
+
+            })
+
+            .eq('id', book.id);
+
+        }
+
+      }
+
+    }
+
+    this.resetForm();
+
+    this.showAddForm = false;
+
+    this.selectedBorrow = null;
+
+    await this.ngOnInit();
+
   }
-
-      this.resetForm();
-
-      this.showAddForm = false;
-
-      this.selectedBorrow = null;
-
-      await this.ngOnInit();
-
-}
 
   async deleteBorrow(borrow: any) {
 

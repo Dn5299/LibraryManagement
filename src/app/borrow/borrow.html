@@ -29,11 +29,11 @@
             <th>CCCD/CMND</th>
             <th>Tên độc giả</th>
             <th>Tên sách</th>
+            <th>Số lượng</th>
             <th>Ngày mượn</th>
             <th>Ngày trả</th>
             <th>Trạng thái</th>
             <th>Thao tác</th>
-
         </tr>
 
     </thead>
@@ -41,23 +41,35 @@
     <tbody>
 
         <tr *ngFor="let borrow of getFilteredBorrow()">
+
             <td>P{{ borrow.id.toString().padStart(4,'0') }}</td>
+
             <td>{{borrow.citizenId}}</td>
+
             <td>{{borrow.readers}}</td>
+
             <td>{{borrow.title}}</td>
+
+            <td>{{borrow.quantityBorrow}}</td>
+
             <td>{{borrow.borrowd}}</td>
+
             <td>{{borrow.returnd}}</td>
+
             <td>{{borrow.note}}</td>
 
             <td>
+
                 <button
-                [disabled]="borrow.note === 'Đang mượn'"
-                (click)="deleteBorrow(borrow)"
+                    [disabled]="borrow.note === 'Đang mượn'"
+                    (click)="deleteBorrow(borrow)"
                 >
                     Xóa
                 </button>
 
-                <button (click)="editBorrow(borrow)">
+                <button
+                    (click)="editBorrow(borrow)"
+                >
                     Sửa
                 </button>
 
@@ -68,8 +80,6 @@
     </tbody>
 
 </table>
-
-
 
 <div
     class="popup"
@@ -82,39 +92,39 @@
 
     </h2>
 
-
+    <input
+    type="text"
+    placeholder="Tên độc giả"
+    [(ngModel)]="newReaders"
+    [disabled]="selectedBorrow">
 
     <input
-        type="text"
-        placeholder="Tên độc giả"
-        [(ngModel)]="newReaders"
-    >
+    type="text"
+    placeholder="Số căn cước"
+    [(ngModel)]="newCitizenId">
 
     <input
-        type="text"
-        placeholder="Số căn cước"
-        [(ngModel)]="newCitizenId"
-    >
+    type="text"
+    placeholder="Tên sách"
+    [(ngModel)]="newTitle"
+    [disabled]="selectedBorrow">
 
     <input
-        type="text"
-        placeholder="Tên sách"
-        [(ngModel)]="newTitle"
-    >
+    type="number"
+    min="1"
+    placeholder="Số lượng mượn"
+    [(ngModel)]="newQuantityBorrow"
+    [disabled]="selectedBorrow">
 
     <input
-        type="text"
-        placeholder="Ngày mượn"
+        type="date"
         [(ngModel)]="newBorrowd"
     >
 
     <input
-        type="text"
-        placeholder="Ngày trả"
+        type="date"
         [(ngModel)]="newReturnd"
     >
-
-
 
     <select
         class="status"
@@ -134,8 +144,6 @@
         </option>
 
     </select>
-
-
 
     <div class="buttonAddBook">
 

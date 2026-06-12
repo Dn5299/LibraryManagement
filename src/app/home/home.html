@@ -1,46 +1,37 @@
 <h1>WELCOME TO LIBRARY MANAGEMENT</h1>
 
-<p></p>
-
-
-
 <div class="dashboard">
 
     <div class="card">
 
         <h2>Tổng sách</h2>
 
-        <p>{{books.length}}</p>
+        <p>{{totalBooks}}</p>
 
     </div>
-
-
 
     <div class="card">
 
         <h2>Đang mượn</h2>
 
-        <p>{{getBorrowingCount()}}</p>
+        <p>{{borrowingCount}}</p>
 
     </div>
-
-
 
     <div class="card">
 
         <h2>Đã trả</h2>
 
-        <p>{{getReturnedCount()}}</p>
+        <p>{{returnedCount}}</p>
 
     </div>
-
-
 
     <div class="card">
 
         <h2>Độc giả</h2>
 
-        <p>{{getReadersCount()}}</p>
+        <p>{{readersCount}}</p>
+
     </div>
 
 </div>

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { supabase } from '../supabase';
 
 @Component({
   selector: 'app-home',
@@ -10,54 +11,66 @@ import { CommonModule } from '@angular/common';
 
 export class Home {
 
-  books: any[] = [];
+  constructor(private cdr: ChangeDetectorRef) {}
 
-  borrow: any[] = [];
-  ngOnInit() {
+  totalBooks = 0;
 
-    const booksData = localStorage.getItem('books');
+  borrowingCount = 0;
 
-    const borrowData = localStorage.getItem('borrow');
+  returnedCount = 0;
 
-    this.books = JSON.parse(booksData || '[]');
+  readersCount = 0;
 
-    this.borrow = JSON.parse(borrowData || '[]');
+  async ngOnInit() {
 
-  }
-  getBorrowingCount() {
+    const { data: books } = await supabase
 
-    return this.borrow.filter(
+      .from('books')
 
-      b => b.note === 'Đang mượn'
+      .select('*');
 
-    ).length;
+    this.totalBooks = books?.reduce(
 
-  }
-  getReturnedCount() {
+  (sum, book) => sum + Number(book.quantity),
 
-    return this.borrow.filter(
+  0
 
-      b => b.note === 'Đã trả'
+) || 0;
 
-    ).length;
+    const { data: borrow } = await supabase
 
-  }
-  getReadersCount() {
+      .from('borrow')
 
-    const citizenIds = this.borrow.map(
+      .select('*');
+
+    if (borrow) {
+
+      this.borrowingCount = borrow.filter(
+
+        b => b.note === 'Đang mượn'
+
+      ).length;
+
+      this.returnedCount = borrow.filter(
+
+        b => b.note === 'Đã trả'
+
+      ).length;
+
+      const citizenIds = borrow.map(
 
         b => b.citizenId
 
-    );
+      );
 
+      const uniqueIds = [...new Set(citizenIds)];
 
+      this.readersCount = uniqueIds.length;
 
-    const uniqueIds = [...new Set(citizenIds)];
+    }
 
+    this.cdr.detectChanges();
 
-
-    return uniqueIds.length;
-
-}
+  }
 
 }
