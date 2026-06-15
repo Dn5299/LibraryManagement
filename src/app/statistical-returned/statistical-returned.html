@@ -1,0 +1,47 @@
+<h1>DANH SÁCH ĐÃ TRẢ</h1>
+
+<table class="table" border="1">
+
+    <thead>
+
+        <tr>
+
+            <th>Mã phiếu</th>
+
+            <th>CCCD/CMND</th>
+
+            <th>Tên độc giả</th>
+
+            <th>Tên sách</th>
+
+            <th>Số lượng</th>
+
+            <th>Ngày trả</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr *ngFor="let item of borrowList">
+
+            <td>
+                P{{ item.id.toString().padStart(4,'0') }}
+            </td>
+
+            <td>{{ item.citizenId }}</td>
+
+            <td>{{ item.readers }}</td>
+
+            <td>{{ item.title }}</td>
+
+            <td>{{ item.quantityBorrow }}</td>
+
+            <td>{{ item.returnd }}</td>
+
+        </tr>
+
+    </tbody>
+
+</table>

@@ -1,0 +1,33 @@
+<h1>SÁCH MƯỢN NHIỀU NHẤT</h1>
+
+<table class="table" border="1">
+
+    <thead>
+
+        <tr>
+
+            <th>Hạng</th>
+
+            <th>Tên sách</th>
+
+            <th>Tổng lượt mượn</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr *ngFor="let book of topBooks; let i = index">
+
+            <td>{{ i + 1 }}</td>
+
+            <td>{{ book.title }}</td>
+
+            <td>{{ book.borrowed }}</td>
+
+        </tr>
+
+    </tbody>
+
+</table>

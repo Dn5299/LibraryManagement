@@ -1,0 +1,37 @@
+<h1>DANH SÁCH ĐỘC GIẢ</h1>
+
+<table class="table" border="1">
+
+    <thead>
+
+        <tr>
+
+            <th>CCCD/CMND</th>
+
+            <th>Tên độc giả</th>
+
+            <th>Số phiếu mượn</th>
+
+            <th>Tổng số sách đã mượn</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr *ngFor="let reader of readers">
+
+            <td>{{ reader.citizenId }}</td>
+
+            <td>{{ reader.readers }}</td>
+
+            <td>{{ reader.borrowCount }}</td>
+
+            <td>{{ reader.totalBooks }}</td>
+
+        </tr>
+
+    </tbody>
+
+</table>

@@ -15,9 +15,41 @@
     Mượn/Trả
 </a>
 
-<a routerLink="/statistical" routerLinkActive="active">
-    Thống kê
-</a>
+<div class="dropdown">
+
+    <a routerLink="/statistical">
+        Thống kê
+    </a>
+
+    <div class="dropdown-content">
+
+        <a routerLink="/statistical/overview">
+            Thống kê chung
+        </a>
+
+        <a routerLink="/statistical/readers">
+            Danh sách độc giả
+        </a>
+
+        <a routerLink="/statistical/borrowing">
+            Danh sách đang mượn
+        </a>
+
+        <a routerLink="/statistical/returned">
+            Danh sách đã trả
+        </a>
+
+        <a routerLink="/statistical/top">
+            Sách mượn nhiều nhất
+        </a>
+
+        <a routerLink="/statistical/inventory">
+            Sách tồn đọng
+        </a>
+
+    </div>
+
+</div>
 
 <a routerLink="/setting" routerLinkActive="active">
     Cài đặt
