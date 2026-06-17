@@ -109,6 +109,15 @@
     padding: 20px;
 
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+     position: fixed;
+
+    top: 55%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 2000;
 
 }
 
@@ -136,6 +145,7 @@
     padding: 0 10px;
 
     box-sizing: border-box;
+    
 
 }
 
@@ -183,4 +193,8 @@ button:disabled {
 
     cursor: not-allowed;
 
+}
+
+.status{
+    width: 100px;
 }

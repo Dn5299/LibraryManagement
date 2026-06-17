@@ -51,9 +51,33 @@
 
 </div>
 
-<a routerLink="/setting" routerLinkActive="active">
-    Cài đặt
-</a>
+<div class="dropdown">
+
+    <a routerLink="/setting/system">
+        Cài đặt
+    </a>
+
+    <div class="dropdown-content">
+
+        <a routerLink="/setting/system">
+            Thông tin hệ thống
+        </a>
+
+        <a routerLink="/setting/developer">
+            Thông tin người phát triển
+        </a>
+
+        <a routerLink="/login">
+            Đăng nhập
+        </a>
+
+        <a (click)="logout()">
+            Đăng xuất
+        </a>
+
+    </div>
+
+</div>
   </div>
 
 </div>

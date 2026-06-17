@@ -1,0 +1,48 @@
+h1 {
+
+    text-align: center;
+
+}
+
+.login-box{
+
+    width: 350px;
+
+    margin: 50px auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+.login-box input{
+
+    height: 40px;
+
+    padding-left: 10px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+}
+
+.login-box button{
+
+    height: 40px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: white;
+
+    cursor: pointer;
+
+}
+
