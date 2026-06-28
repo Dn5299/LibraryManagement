@@ -6,7 +6,8 @@
         class="search"
         type="text"
         placeholder="Tìm kiếm sách..."
-        [(ngModel)]="searchText"
+        [ngModel]="searchText()"
+        (ngModelChange)="searchText.set($event)"
     >
 
     <button
@@ -25,6 +26,7 @@
     <thead>
 
         <tr>
+
             <th>Mã sách</th>
             <th>Tên sách</th>
             <th>Tác giả</th>
@@ -33,21 +35,30 @@
             <th>Số lượng</th>
             <th>Trạng thái</th>
             <th>Thao tác</th>
+
         </tr>
 
     </thead>
 
     <tbody>
 
-        <tr *ngFor="let book of getFilteredBooks()">
+        @for (book of filteredBooks(); track book.id) {
+
+        <tr>
 
             <td>B{{ book.id.toString().padStart(4,'0') }}</td>
-            <td>{{book.title}}</td>
-            <td>{{book.author}}</td>
-            <td>{{book.category}}</td>
-            <td>{{book.year}}</td>
-            <td>{{book.quantity}}</td>
-            <td>{{book.status}}</td>
+
+            <td>{{ book.title }}</td>
+
+            <td>{{ book.author }}</td>
+
+            <td>{{ book.category }}</td>
+
+            <td>{{ book.year }}</td>
+
+            <td>{{ book.quantity }}</td>
+
+            <td>{{ book.status }}</td>
 
             <td>
 
@@ -63,24 +74,20 @@
 
         </tr>
 
+        }
+
     </tbody>
 
 </table>
+@if (showAddForm()) {
 
-
-
-<div
-    class="popup"
-    *ngIf="showAddForm"
->
+<div class="popup">
 
     <h2>
 
-        {{ selectedBook ? 'Sửa sách' : 'Thêm sách' }}
+        {{ selectedBook() ? 'Sửa sách' : 'Thêm sách' }}
 
     </h2>
-
-
 
     <input
         type="text"
@@ -118,8 +125,6 @@
         [(ngModel)]="newStatus"
     >
 
-
-
     <div class="buttonAddBook">
 
         <button (click)="saveBook()">
@@ -128,7 +133,7 @@
 
         </button>
 
-        <button (click)="showAddForm = false">
+        <button (click)="closeForm()">
 
             Đóng
 
@@ -137,3 +142,5 @@
     </div>
 
 </div>
+
+}

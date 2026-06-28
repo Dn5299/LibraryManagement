@@ -1,25 +1,35 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { supabase } from '../supabase';
+
+import { Book } from './books.model';
+import { BooksService } from './books.service';
 
 @Component({
   selector: 'app-books',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './books.html',
   styleUrls: ['./books.css']
 })
-export class Books {
+export class Books implements OnInit {
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  private readonly booksService = inject(BooksService);
 
-  showAddForm = false;
+  books = signal<Book[]>([]);
 
-  searchText = '';
+  showAddForm = signal(false);
 
-  selectedBook: any = null;
+  searchText = signal('');
 
-  books: any[] = [];
+  selectedBook = signal<Book | null>(null);
 
   newTitle = '';
   newAuthor = '';
@@ -28,27 +38,39 @@ export class Books {
   newQuantity = '';
   newStatus = '';
 
-  async ngOnInit() {
+  filteredBooks = computed(() => {
 
-  const { data, error } = await supabase
-    .from('books')
-    .select('*');
+    const keyword = this.searchText().trim().toLowerCase();
 
-  if (error) {
+    if (!keyword) {
 
-    console.log(error);
+      return this.books();
 
-    return;
+    }
+
+    return this.books().filter(book =>
+
+      book.title.toLowerCase().includes(keyword)
+
+    );
+
+  });
+
+  async ngOnInit(): Promise<void> {
+
+    await this.loadBooks();
 
   }
 
-  this.books = data || [];
+  async loadBooks(): Promise<void> {
 
-  this.cdr.detectChanges();
+    const data = await this.booksService.getBooks();
 
-}
+    this.books.set(data);
 
-  resetForm() {
+  }
+
+  resetForm(): void {
 
     this.newTitle = '';
     this.newAuthor = '';
@@ -59,140 +81,108 @@ export class Books {
 
   }
 
-  openAddForm() {
-
-    this.showAddForm = true;
-
-    this.selectedBook = null;
+  openAddForm(): void {
 
     this.resetForm();
 
+    this.selectedBook.set(null);
+
+    this.showAddForm.set(true);
+
   }
 
-  editBook(book: any) {
+  editBook(book: Book): void {
 
-    this.showAddForm = true;
+    this.selectedBook.set(book);
 
-    this.selectedBook = book;
+    this.showAddForm.set(true);
 
     this.newTitle = book.title;
+
     this.newAuthor = book.author;
+
     this.newCategory = book.category;
-    this.newYear = book.year;
-    this.newQuantity = book.quantity;
+
+    this.newYear = book.year.toString();
+
+    this.newQuantity = book.quantity.toString();
+
     this.newStatus = book.status;
 
   }
+    async saveBook(): Promise<void> {
 
-  async saveBook() {
+    const book = {
 
-    if (this.selectedBook) {
+      title: this.newTitle,
 
-      const { error } = await supabase
+      author: this.newAuthor,
 
-        .from('books')
+      category: this.newCategory,
 
-        .update({
+      year: Number(this.newYear),
 
-          title: this.newTitle,
+      quantity: Number(this.newQuantity),
 
-          author: this.newAuthor,
+      status: this.newStatus
 
-          category: this.newCategory,
+    };
 
-          year: Number(this.newYear),
+    let success = false;
 
-          quantity: Number(this.newQuantity),
+    if (this.selectedBook()) {
 
-          status: this.newStatus
+      success = await this.booksService.updateBook({
 
-        })
+        id: this.selectedBook()!.id,
 
-        .eq('id', this.selectedBook.id);
+        ...book
 
-      if (error) {
+      });
 
-        console.log(error);
+    } else {
 
-        return;
-
-      }
-
-    }
-
-    else {
-
-      const { error } = await supabase
-
-        .from('books')
-
-        .insert([{
-
-          title: this.newTitle,
-
-          author: this.newAuthor,
-
-          category: this.newCategory,
-
-          year: Number(this.newYear),
-
-          quantity: Number(this.newQuantity),
-
-          status: this.newStatus
-
-        }]);
-
-      if (error) {
-
-        console.log(error);
-
-        return;
-
-      }
+      success = await this.booksService.addBook(book);
 
     }
 
-    this.resetForm();
-
-    this.showAddForm = false;
- 
-    this.selectedBook = null;
-
-    await this.ngOnInit();
-
-  }
-
-  async deleteBook(book: any) {
-
-    const { error } = await supabase
-
-      .from('books')
-
-      .delete()
-
-      .eq('id', book.id);
-
-    if (error) {
-
-      console.log(error);
+    if (!success) {
 
       return;
 
     }
 
-    await this.ngOnInit();
+    this.resetForm();
+
+    this.selectedBook.set(null);
+
+    this.showAddForm.set(false);
+
+    await this.loadBooks();
 
   }
 
-  getFilteredBooks() {
+  async deleteBook(book: Book): Promise<void> {
 
-    return this.books.filter(book =>
+    const success = await this.booksService.deleteBook(book.id);
 
-      book.title
-        ?.toLowerCase()
-        .includes(this.searchText.toLowerCase())
+    if (!success) {
 
-    );
+      return;
+
+    }
+
+    await this.loadBooks();
+
+  }
+
+  closeForm(): void {
+
+    this.showAddForm.set(false);
+
+    this.selectedBook.set(null);
+
+    this.resetForm();
 
   }
 
