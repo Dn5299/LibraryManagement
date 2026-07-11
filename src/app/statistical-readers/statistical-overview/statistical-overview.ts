@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 
 @Component({
   selector: 'app-statistical-overview',

@@ -32,6 +32,9 @@
             <th>Số lượng</th>
             <th>Ngày mượn</th>
             <th>Ngày trả</th>
+            <th>Tiền mượn</th>
+            <th>Tiền phạt</th>
+            <th>Tổng tiền</th>
             <th>Trạng thái</th>
             <th>Thao tác</th>
         </tr>
@@ -55,6 +58,12 @@
             <td>{{borrow.borrowd}}</td>
 
             <td>{{borrow.returnd}}</td>
+            
+            <td>{{ borrow.borrow_fee | number:'1.0-0' }} đ</td>
+
+            <td>{{ borrow.late_fee | number:'1.0-0' }} đ</td>
+
+            <td>{{ borrow.total_fee | number:'1.0-0' }} đ</td>
 
             <td>{{borrow.note}}</td>
 
@@ -107,6 +116,7 @@
     type="text"
     placeholder="Tên sách"
     [(ngModel)]="newTitle"
+    (ngModelChange)="calculateFee()"
     [disabled]="selectedBorrow">
 
     <input
@@ -114,7 +124,19 @@
     min="1"
     placeholder="Số lượng mượn"
     [(ngModel)]="newQuantityBorrow"
+    (ngModelChange)="calculateFee()"
     [disabled]="selectedBorrow">
+    <hr>
+
+    <p><b>Đơn giá:</b> {{ unitPrice | number:'1.0-0' }} đ</p>
+
+    <p><b>Tiền mượn:</b> {{ borrowFee | number:'1.0-0' }} đ</p>
+
+    <p><b>Tiền phạt:</b> {{ lateFee | number:'1.0-0' }} đ</p>
+
+    <p><b>Tổng tiền:</b> {{ totalFee | number:'1.0-0' }} đ</p>
+
+    <hr>
 
     <input
         type="date"

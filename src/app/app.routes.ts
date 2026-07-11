@@ -4,7 +4,7 @@ import { Home } from './home/home';
 import { Books } from './books/books';
 import { Borrow } from './borrow/borrow';
 import { Setting } from './setting/setting';
-import { StatisticalOverview } from './statistical-overview/statistical-overview';
+import { StatisticalOverview } from './statistical-readers/statistical-overview/statistical-overview';
 import { StatisticalReaders } from './statistical-readers/statistical-readers';
 import { StatisticalBorrowing } from './statistical-borrowing/statistical-borrowing';
 import { StatisticalReturned } from './statistical-returned/statistical-returned';

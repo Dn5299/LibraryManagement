@@ -28,6 +28,13 @@ export class Borrow {
   newNote = '';
   newCitizenId = '';
   newQuantityBorrow = 1;
+  unitPrice = 5000;
+
+  borrowFee = 0;
+
+  lateFee = 0;
+
+  totalFee = 0;
 
   async ngOnInit() {
 
@@ -60,6 +67,18 @@ export class Borrow {
     this.newQuantityBorrow = 1;
 
   }
+  calculateFee() {
+
+  this.borrowFee =
+    Number(this.newQuantityBorrow) *
+    this.unitPrice;
+
+  this.lateFee = 0;
+
+  this.totalFee =
+    this.borrowFee;
+
+}
 
   openAddForm() {
 
@@ -68,6 +87,8 @@ export class Borrow {
     this.selectedBorrow = null;
 
     this.resetForm();
+
+    this.calculateFee();
 
   }
 
@@ -84,10 +105,12 @@ export class Borrow {
     this.newReturnd = borrow.returnd;
     this.newNote = borrow.note;
     this.newQuantityBorrow = borrow.quantityBorrow;
+    this.calculateFee();
 
   }
 
   async saveBorrow() {
+    this.calculateFee();
 
     if (this.selectedBorrow) {
 
@@ -99,21 +122,29 @@ export class Borrow {
 
         .update({
 
-          citizenId: this.newCitizenId,
+  citizenId: this.newCitizenId,
 
-          readers: this.newReaders,
+  readers: this.newReaders,
 
-          title: this.newTitle,
+  title: this.newTitle,
 
-          borrowd: this.newBorrowd,
+  borrowd: this.newBorrowd,
 
-          returnd: this.newReturnd,
+  returnd: this.newReturnd,
 
-          note: this.newNote,
+  note: this.newNote,
 
-          quantityBorrow: Number(this.newQuantityBorrow)
+  quantityBorrow: Number(this.newQuantityBorrow),
 
-        })
+  unit_price: this.unitPrice,
+
+  borrow_fee: this.borrowFee,
+
+  late_fee: this.lateFee,
+
+  total_fee: this.totalFee
+
+})
 
         .eq('id', this.selectedBorrow.id);
 
@@ -227,22 +258,35 @@ export class Borrow {
 
         .insert([{
 
-          citizenId: this.newCitizenId,
+  citizenId: this.newCitizenId,
 
-          readers: this.newReaders,
+  readers: this.newReaders,
 
-          title: this.newTitle,
+  title: this.newTitle,
 
-          borrowd: this.newBorrowd,
+  borrowd: this.newBorrowd,
 
-          returnd: this.newReturnd,
+  returnd: this.newReturnd,
 
-          note: this.newNote,
+  note: this.newNote,
 
-          quantityBorrow:
-            Number(this.newQuantityBorrow)
+  quantityBorrow:
+    Number(this.newQuantityBorrow),
 
-        }]);
+  unit_price:
+    this.unitPrice,
+
+  borrow_fee:
+    this.borrowFee,
+
+  late_fee:
+    this.lateFee,
+
+  total_fee:
+    this.totalFee
+    
+
+}]);
 
       if (error) {
 
