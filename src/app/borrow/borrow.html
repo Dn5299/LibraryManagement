@@ -6,7 +6,8 @@
         class="search"
         type="text"
         placeholder="Tìm kiếm tên độc giả"
-        [(ngModel)]="searchText"
+        [ngModel]="searchText()"
+        (ngModelChange)="searchText.set($event)"
     >
 
     <button
@@ -43,7 +44,7 @@
 
     <tbody>
 
-        <tr *ngFor="let borrow of getFilteredBorrow()">
+        <tr *ngFor="let borrow of filteredBorrow()">
 
             <td>P{{ borrow.id.toString().padStart(4,'0') }}</td>
 
@@ -92,12 +93,12 @@
 
 <div
     class="popup"
-    *ngIf="showAddForm"
+    *ngIf="showAddForm()"
 >
 
     <h2>
 
-        {{ selectedBorrow ? 'Sửa phiếu mượn' : 'Thêm phiếu mượn' }}
+        {{ selectedBorrow() ? 'Sửa phiếu mượn' : 'Thêm phiếu mượn' }}
 
     </h2>
 
@@ -105,7 +106,8 @@
     type="text"
     placeholder="Tên độc giả"
     [(ngModel)]="newReaders"
-    [disabled]="selectedBorrow">
+    [disabled]="!!selectedBorrow()"
+    >
 
     <input
     type="text"
@@ -117,7 +119,8 @@
     placeholder="Tên sách"
     [(ngModel)]="newTitle"
     (ngModelChange)="calculateFee()"
-    [disabled]="selectedBorrow">
+    [disabled]="!!selectedBorrow()"
+    >
 
     <input
     type="number"
@@ -125,7 +128,8 @@
     placeholder="Số lượng mượn"
     [(ngModel)]="newQuantityBorrow"
     (ngModelChange)="calculateFee()"
-    [disabled]="selectedBorrow">
+    [disabled]="!!selectedBorrow()"
+    >
     <hr>
 
     <p><b>Đơn giá:</b> {{ unitPrice | number:'1.0-0' }} đ</p>
@@ -175,7 +179,7 @@
 
         </button>
 
-        <button (click)="showAddForm = false">
+        <button (click)="showAddForm.set(false)">
 
             Đóng
 

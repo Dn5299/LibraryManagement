@@ -1,3 +1,10 @@
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Book } from './books.model';
+import { BooksService } from './books.service';
+import { BookTable } from './components/book-table/book-table';
+import { BookForm } from './components/book-form/book-form';
+
 import {
   Component,
   computed,
@@ -6,24 +13,17 @@ import {
   signal
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-import { Book } from './books.model';
-import { BooksService } from './books.service';
-
 @Component({
   selector: 'app-books',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,  BookTable, BookForm],
   templateUrl: './books.html',
   styleUrls: ['./books.css']
 })
-export class Books implements OnInit {
-
+export class Books implements OnInit { //chứa logic quản lý sách
   private readonly booksService = inject(BooksService);
 
-  books = signal<Book[]>([]);
+  books = signal<Book[]>([]); // save danh sách
 
   showAddForm = signal(false);
 
@@ -37,6 +37,7 @@ export class Books implements OnInit {
   newYear = '';
   newQuantity = '';
   newStatus = '';
+  newPrice = '';
 
   filteredBooks = computed(() => {
 
@@ -56,6 +57,7 @@ export class Books implements OnInit {
 
   });
 
+// lấy dữ liệu sách 
   async ngOnInit(): Promise<void> {
 
     await this.loadBooks();
@@ -64,7 +66,7 @@ export class Books implements OnInit {
 
   async loadBooks(): Promise<void> {
 
-    const data = await this.booksService.getBooks();
+    const data = await this.booksService.getBooks(); // service -> supabase -> data -> save ( signal books) 
 
     this.books.set(data);
 
@@ -78,6 +80,7 @@ export class Books implements OnInit {
     this.newYear = '';
     this.newQuantity = '';
     this.newStatus = '';
+    this.newPrice = '';
 
   }
 
@@ -93,23 +96,16 @@ export class Books implements OnInit {
 
   editBook(book: Book): void {
 
-    this.selectedBook.set(book);
+  this.selectedBook.set(book);
+  this.newTitle = book.title;
+  this.newAuthor = book.author;
+  this.newCategory = book.category;
+  this.newYear = book.year.toString();
+  this.newQuantity = book.quantity.toString();
+  this.newStatus = book.status;
+  this.showAddForm.set(true);
 
-    this.showAddForm.set(true);
-
-    this.newTitle = book.title;
-
-    this.newAuthor = book.author;
-
-    this.newCategory = book.category;
-
-    this.newYear = book.year.toString();
-
-    this.newQuantity = book.quantity.toString();
-
-    this.newStatus = book.status;
-
-  }
+}
     async saveBook(): Promise<void> {
 
     const book = {

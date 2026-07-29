@@ -17,56 +17,39 @@ export class StatisticalTop {
 
   async ngOnInit() {
 
-    const { data: books } = await supabase
-      .from('books')
-      .select('*');
-
     const { data: borrow } = await supabase
       .from('borrow')
       .select('*');
 
-    const result: any[] = [];
+    const bookMap = new Map();
 
-    (books || []).forEach(book => {
+    (borrow || []).forEach(item => {
 
-      const borrowedQuantity = (borrow || [])
+      if (!bookMap.has(item.title)) {
 
-        .filter(item => item.title === book.title)
+        bookMap.set(item.title, {
 
-        .reduce(
+          title: item.title,
 
-          (sum, item) =>
-
-            sum + Number(item.quantityBorrow || 0),
-
-          0
-
-        );
-
-      const ratio =
-
-        borrowedQuantity /
-        Number(book.quantity);
-
-      if (ratio > 0.5) {
-
-        result.push({
-
-          title: book.title,
-
-          quantity: book.quantity,
-
-          borrowed: borrowedQuantity,
-
-          ratio: (ratio * 100).toFixed(1)
+          borrowed: 0
 
         });
 
       }
 
+      const book = bookMap.get(item.title);
+
+      book.borrowed += Number(
+        item.quantityBorrow || 0
+      );
+
     });
 
-    this.topBooks = result;
+    this.topBooks = Array.from(
+      bookMap.values()
+    ).sort(
+      (a, b) => b.borrowed - a.borrowed
+    );
 
     this.cdr.detectChanges();
 

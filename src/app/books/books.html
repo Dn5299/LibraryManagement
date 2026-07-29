@@ -21,126 +21,31 @@
 
 <br>
 
-<table class="table" border="1">
+<app-book-table
+  [books]="filteredBooks()"
+  (edit)="editBook($event)"
+  (delete)="deleteBook($event)">
+</app-book-table>
 
-    <thead>
 
-        <tr>
+<app-book-form
+  [visible]="showAddForm()"
+  [selectedBook]="selectedBook()"
 
-            <th>Mã sách</th>
-            <th>Tên sách</th>
-            <th>Tác giả</th>
-            <th>Danh mục</th>
-            <th>Năm xuất bản</th>
-            <th>Số lượng</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
+  [title]="newTitle"
+  [author]="newAuthor"
+  [category]="newCategory"
+  [year]="newYear"
+  [quantity]="newQuantity"
+  [status]="newStatus"
 
-        </tr>
+  (titleChange)="newTitle = $event"
+  (authorChange)="newAuthor = $event"
+  (categoryChange)="newCategory = $event"
+  (yearChange)="newYear = $event"
+  (quantityChange)="newQuantity = $event"
+  (statusChange)="newStatus = $event"
 
-    </thead>
-
-    <tbody>
-
-        @for (book of filteredBooks(); track book.id) {
-
-        <tr>
-
-            <td>B{{ book.id.toString().padStart(4,'0') }}</td>
-
-            <td>{{ book.title }}</td>
-
-            <td>{{ book.author }}</td>
-
-            <td>{{ book.category }}</td>
-
-            <td>{{ book.year }}</td>
-
-            <td>{{ book.quantity }}</td>
-
-            <td>{{ book.status }}</td>
-
-            <td>
-
-                <button (click)="editBook(book)">
-                    Sửa
-                </button>
-
-                <button (click)="deleteBook(book)">
-                    Xóa
-                </button>
-
-            </td>
-
-        </tr>
-
-        }
-
-    </tbody>
-
-</table>
-@if (showAddForm()) {
-
-<div class="popup">
-
-    <h2>
-
-        {{ selectedBook() ? 'Sửa sách' : 'Thêm sách' }}
-
-    </h2>
-
-    <input
-        type="text"
-        placeholder="Tên sách"
-        [(ngModel)]="newTitle"
-    >
-
-    <input
-        type="text"
-        placeholder="Tác giả"
-        [(ngModel)]="newAuthor"
-    >
-
-    <input
-        type="text"
-        placeholder="Danh mục"
-        [(ngModel)]="newCategory"
-    >
-
-    <input
-        type="text"
-        placeholder="Năm xuất bản"
-        [(ngModel)]="newYear"
-    >
-
-    <input
-        type="text"
-        placeholder="Số lượng"
-        [(ngModel)]="newQuantity"
-    >
-
-    <input
-        type="text"
-        placeholder="Trạng thái"
-        [(ngModel)]="newStatus"
-    >
-
-    <div class="buttonAddBook">
-
-        <button (click)="saveBook()">
-
-            Lưu
-
-        </button>
-
-        <button (click)="closeForm()">
-
-            Đóng
-
-        </button>
-
-    </div>
-
-</div>
-
-}
+  (save)="saveBook()"
+  (close)="closeForm()">
+</app-book-form>

@@ -1,0 +1,65 @@
+@if (visible()) {
+
+<div class="popup">
+
+    <h2>
+        {{ selectedBook() ? 'Sửa sách' : 'Thêm sách' }}
+    </h2>
+
+    <input
+        type="text"
+        placeholder="Tên sách"
+        [ngModel]="title()"
+        (ngModelChange)="titleChange.emit($event)"
+    >
+
+    <input
+        type="text"
+        placeholder="Tác giả"
+        [ngModel]="author()"
+        (ngModelChange)="authorChange.emit($event)"
+    >
+
+    <input
+        type="text"
+        placeholder="Danh mục"
+        [ngModel]="category()"
+        (ngModelChange)="categoryChange.emit($event)"
+    >
+
+    <input
+        type="text"
+        placeholder="Năm xuất bản"
+        [ngModel]="year()"
+        (ngModelChange)="yearChange.emit($event)"
+    >
+
+    <input
+        type="text"
+        placeholder="Số lượng"
+        [ngModel]="quantity()"
+        (ngModelChange)="quantityChange.emit($event)"
+    >
+
+    <input
+        type="text"
+        placeholder="Trạng thái"
+        [ngModel]="status()"
+        (ngModelChange)="statusChange.emit($event)"
+    >
+
+    <div class="buttonAddBook">
+
+        <button (click)="save.emit()">
+            Lưu
+        </button>
+
+        <button (click)="close.emit()">
+            Đóng
+        </button>
+
+    </div>
+
+</div>
+
+}

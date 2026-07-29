@@ -54,42 +54,7 @@ h1{
 
 .add-book:hover{
 
-    background: #1d4ed8;
-
-}
-
-.table{
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-    table-layout: fixed;
-
-}
-
-.table th{
-
-    background: #1e293b;
-
-    color: white;
-
-    padding: 12px;
-
-}
-
-.table td{
-
-    padding: 10px;
-
-    text-align: center;
-
-}
-
-.table tr:hover{
-
-    background: #f8fafc;
-
+    background: #1d4ed8;  
 }
 
 .popup{
