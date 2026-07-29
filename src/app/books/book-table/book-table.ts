@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { Book } from '../../books.model';
+import { Book } from '../books.model';
 
 @Component({
   selector: 'app-book-table',

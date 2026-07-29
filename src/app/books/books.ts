@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Book } from './books.model';
 import { BooksService } from './books.service';
-import { BookTable } from './components/book-table/book-table';
-import { BookForm } from './components/book-form/book-form';
+import { BookTable } from './book-table/book-table';
+import { BookForm } from './book-form/book-form';
 
 import {
   Component,
@@ -103,6 +103,7 @@ export class Books implements OnInit { //chứa logic quản lý sách
   this.newYear = book.year.toString();
   this.newQuantity = book.quantity.toString();
   this.newStatus = book.status;
+
   this.showAddForm.set(true);
 
 }

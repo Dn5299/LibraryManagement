@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Book } from '../../books.model';
+import { Book } from '../books.model';
 
 @Component({
   selector: 'app-book-form',
