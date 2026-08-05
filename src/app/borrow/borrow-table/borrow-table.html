@@ -1,1 +1,72 @@
-<p>borrow-table works!</p>
+<table class="table" border="1">
+
+    <thead>
+
+        <tr>
+
+            <th>Mã phiếu</th>
+            <th>CCCD/CMND</th>
+            <th>Tên độc giả</th>
+            <th>Tên sách</th>
+            <th>Số lượng</th>
+            <th>Ngày mượn</th>
+            <th>Ngày trả</th>
+            <th>Tiền mượn</th>
+            <th>Tiền phạt</th>
+            <th>Tổng tiền</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @for (item of borrow(); track item.id) {
+
+        <tr>
+
+            <td>P{{ item.id.toString().padStart(4, '0') }}</td>
+
+            <td>{{ item.citizenId }}</td>
+
+            <td>{{ item.readers }}</td>
+
+            <td>{{ item.title }}</td>
+
+            <td>{{ item.quantityBorrow }}</td>
+
+            <td>{{ item.borrowd }}</td>
+
+            <td>{{ item.returnd }}</td>
+
+            <td>{{ item.borrow_fee | number:'1.0-0' }} đ</td>
+
+            <td>{{ item.late_fee | number:'1.0-0' }} đ</td>
+
+            <td>{{ item.total_fee | number:'1.0-0' }} đ</td>
+
+            <td>{{ item.note }}</td>
+
+            <td>
+
+                <button
+                    [disabled]="item.note === 'Đang mượn'"
+                    (click)="delete.emit(item)">
+                    Xóa
+                </button>
+
+                <button (click)="edit.emit(item)">
+                    Sửa
+                </button>
+
+            </td>
+
+        </tr>
+
+        }
+
+    </tbody>
+
+</table>

@@ -1,1 +1,93 @@
-<p>borrow-form works!</p>
+@if (visible()) {
+
+<div class="popup">
+
+    <h2>
+        {{ selectedBorrow() ? 'Sửa phiếu mượn' : 'Thêm phiếu mượn' }}
+    </h2>
+
+    <input
+        type="text"
+        placeholder="Tên độc giả"
+        [ngModel]="readers()"
+        (ngModelChange)="readersChange.emit($event)"
+        [disabled]="!!selectedBorrow()"
+    >
+
+    <input
+        type="text"
+        placeholder="Số căn cước"
+        [ngModel]="citizenId()"
+        (ngModelChange)="citizenIdChange.emit($event)"
+    >
+
+    <input
+        type="text"
+        placeholder="Tên sách"
+        [ngModel]="title()"
+        (ngModelChange)="titleChange.emit($event)"
+        [disabled]="!!selectedBorrow()"
+    >
+
+    <input
+        type="number"
+        min="1"
+        placeholder="Số lượng mượn"
+        [ngModel]="quantityBorrow()"
+        (ngModelChange)="quantityBorrowChange.emit($event)"
+        [disabled]="!!selectedBorrow()"
+    >
+
+    <hr>
+
+    <p><b>Đơn giá:</b> {{ unitPrice() | number:'1.0-0' }} đ</p>
+
+    <p><b>Tiền mượn:</b> {{ borrowFee() | number:'1.0-0' }} đ</p>
+
+    <p><b>Tiền phạt:</b> {{ lateFee() | number:'1.0-0' }} đ</p>
+
+    <p><b>Tổng tiền:</b> {{ totalFee() | number:'1.0-0' }} đ</p>
+
+    <hr>
+
+    <input
+        type="date"
+        [ngModel]="borrowd()"
+        (ngModelChange)="borrowdChange.emit($event)"
+    >
+
+    <input
+        type="date"
+        [ngModel]="returnd()"
+        (ngModelChange)="returndChange.emit($event)"
+    >
+
+    <select
+        class="status"
+        [ngModel]="note()"
+        (ngModelChange)="noteChange.emit($event)"
+    >
+        <option value="Đang mượn">
+            Đang mượn
+        </option>
+
+        <option value="Đã trả">
+            Đã trả
+        </option>
+    </select>
+
+    <div class="buttonAddBook">
+
+        <button (click)="save.emit()">
+            Lưu
+        </button>
+
+        <button (click)="close.emit()">
+            Đóng
+        </button>
+
+    </div>
+
+</div>
+
+}
