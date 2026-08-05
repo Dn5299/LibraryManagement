@@ -35,7 +35,12 @@
 
             <td>{{ book.quantity }}</td>
 
-            <td>{{ book.status }}</td>
+            <td 
+            appStatusColor
+            [status]="book.status"
+            >
+            {{ book.status }}
+            </td>
 
             <td>
 
