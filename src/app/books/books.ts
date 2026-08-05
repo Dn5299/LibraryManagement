@@ -1,9 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators
+} from '@angular/forms';
 import { Book } from './books.model';
 import { BooksService } from './books.service';
 import { BookTable } from './book-table/book-table';
 import { BookForm } from './book-form/book-form';
+import { firstValueFrom } from 'rxjs';
 
 import {
   Component,
@@ -16,12 +22,19 @@ import {
 @Component({
   selector: 'app-books',
   standalone: true,
-  imports: [CommonModule, FormsModule,  BookTable, BookForm],
+  imports: [
+  CommonModule,
+  FormsModule,
+  ReactiveFormsModule,
+  BookTable,
+  BookForm
+],
   templateUrl: './books.html',
   styleUrls: ['./books.css']
 })
 export class Books implements OnInit { //chứa logic quản lý sách
   private readonly booksService = inject(BooksService);
+  private readonly fb = inject(FormBuilder);
 
   books = signal<Book[]>([]); // save danh sách
 
@@ -66,11 +79,13 @@ export class Books implements OnInit { //chứa logic quản lý sách
 
   async loadBooks(): Promise<void> {
 
-    const data = await this.booksService.getBooks(); // service -> supabase -> data -> save ( signal books) 
+  const data = await firstValueFrom(
+    this.booksService.getBooks()
+  );
 
-    this.books.set(data);
+  this.books.set(data);
 
-  }
+}
 
   resetForm(): void {
 
@@ -129,17 +144,21 @@ export class Books implements OnInit { //chứa logic quản lý sách
 
     if (this.selectedBook()) {
 
-      success = await this.booksService.updateBook({
+      success = await firstValueFrom(
+      this.booksService.updateBook({
 
         id: this.selectedBook()!.id,
-
+    
         ...book
 
-      });
+      }));
+  
 
     } else {
 
-      success = await this.booksService.addBook(book);
+      success = await firstValueFrom(
+      this.booksService.addBook(book)
+);
 
     }
 
@@ -161,7 +180,9 @@ export class Books implements OnInit { //chứa logic quản lý sách
 
   async deleteBook(book: Book): Promise<void> {
 
-    const success = await this.booksService.deleteBook(book.id);
+    const success = await firstValueFrom(
+    this.booksService.deleteBook(book.id)
+);
 
     if (!success) {
 
