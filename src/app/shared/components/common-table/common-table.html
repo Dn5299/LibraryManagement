@@ -16,7 +16,13 @@
       <tr>
 
         @for (column of columns(); track column.key) {
-          <td>{{ item[column.key] }}</td>
+          <td>
+      @if (column.type === 'money') {
+      {{ item[column.key] | money }}
+      } @else {
+      {{ item[column.key] }} 
+    }
+</td>
         }
 
         <td>
