@@ -4,9 +4,10 @@
 
     <input
         class="search"
+        type="text"
+        placeholder="Tìm kiếm tên độc giả"
         [ngModel]="searchText()"
         (ngModelChange)="searchText.set($event)"
-        placeholder="Tìm kiếm tên độc giả"
     >
 
     <button
@@ -43,19 +44,22 @@
     (quantityBorrowChange)="newQuantityBorrow = $event; calculateFee()"
 
     [borrowd]="newBorrowd"
-    (borrowdChange)="newBorrowd = $event"
+    (borrowdChange)="newBorrowd = $event; calculateFee()"
+
+    [dueDate]="newDueDate"
+    (dueDateChange)="newDueDate = $event; calculateFee()"
 
     [returnd]="newReturnd"
-    (returndChange)="newReturnd = $event"
+    (returndChange)="newReturnd = $event; calculateFee()"
 
     [note]="newNote"
-    (noteChange)="newNote = $event"
+    (noteChange)="newNote = $event; calculateFee()"
 
-    [unitPrice]="unitPrice"
+    [unitPrice]="borrowPrice"
     [borrowFee]="borrowFee"
     [lateFee]="lateFee"
     [totalFee]="totalFee"
 
     (save)="saveBorrow()"
-    (close)="showAddForm.set(false)">
+    (close)="closeForm()">
 </app-borrow-form>

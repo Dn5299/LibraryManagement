@@ -40,21 +40,45 @@
 
     <hr>
 
-    <p><b>Đơn giá:</b> {{ unitPrice() | number:'1.0-0' }} đ</p>
+    <p>
+        <b>Đơn giá:</b>
+        {{ unitPrice() | number:'1.0-0' }} đ/ngày/cuốn
+    </p>
 
-    <p><b>Tiền mượn:</b> {{ borrowFee() | number:'1.0-0' }} đ</p>
+    <p>
+        <b>Tiền mượn:</b>
+        {{ borrowFee() | number:'1.0-0' }} đ
+    </p>
 
-    <p><b>Tiền phạt:</b> {{ lateFee() | number:'1.0-0' }} đ</p>
+    <p>
+        <b>Tiền phạt:</b>
+        {{ lateFee() | number:'1.0-0' }} đ
+    </p>
 
-    <p><b>Tổng tiền:</b> {{ totalFee() | number:'1.0-0' }} đ</p>
+    <p>
+        <b>Tổng tiền:</b>
+        {{ totalFee() | number:'1.0-0' }} đ
+    </p>
 
     <hr>
+
+    <label>Ngày mượn</label>
 
     <input
         type="date"
         [ngModel]="borrowd()"
         (ngModelChange)="borrowdChange.emit($event)"
     >
+
+    <label>Hạn trả</label>
+
+    <input
+        type="date"
+        [ngModel]="dueDate()"
+        (ngModelChange)="dueDateChange.emit($event)"
+    >
+
+    <label>Ngày trả thực tế</label>
 
     <input
         type="date"

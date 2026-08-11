@@ -6,7 +6,10 @@ import { Borrow } from '../borrow.model';
 @Component({
   selector: 'app-borrow-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
   templateUrl: './borrow-form.html',
   styleUrl: './borrow-form.css'
 })
@@ -20,8 +23,11 @@ export class BorrowForm {
   citizenId = input.required<string>();
   title = input.required<string>();
   quantityBorrow = input.required<number>();
+
   borrowd = input.required<string>();
+  dueDate = input.required<string>();
   returnd = input.required<string>();
+
   note = input.required<string>();
 
   unitPrice = input.required<number>();
@@ -33,12 +39,14 @@ export class BorrowForm {
   citizenIdChange = output<string>();
   titleChange = output<string>();
   quantityBorrowChange = output<number>();
+
   borrowdChange = output<string>();
+  dueDateChange = output<string>();
   returndChange = output<string>();
+
   noteChange = output<string>();
 
   save = output<void>();
-
   close = output<void>();
 
 }

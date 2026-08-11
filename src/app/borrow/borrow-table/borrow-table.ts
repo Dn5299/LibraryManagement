@@ -30,6 +30,7 @@ export class BorrowTable {
     { key: 'title', label: 'Tên sách' },
     { key: 'quantityBorrow', label: 'Số lượng' },
     { key: 'borrowd', label: 'Ngày mượn' },
+    { key: 'dueDate', label: 'Hạn trả' },
     { key: 'returnd', label: 'Ngày trả' },
     { key: 'borrow_fee', label: 'Tiền mượn', type: 'money' },
     { key: 'late_fee', label: 'Tiền phạt', type: 'money' },

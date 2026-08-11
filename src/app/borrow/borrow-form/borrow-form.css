@@ -1,107 +1,113 @@
 .popup {
+  position: fixed;
 
-    position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-    top: 50%;
-    left: 50%;
+  width: 450px;
+  max-width: calc(100vw - 40px);
 
-    transform: translate(-50%, -50%);
+  max-height: 80vh;
 
-    width: 450px;
+  overflow-y: scroll;
 
-    background: white;
+  background: white;
+  border-radius: 10px;
 
-    border-radius: 10px;
+  padding: 18px;
 
-    padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 
-    z-index: 1000;
+  display: flex;
+  flex-direction: column;
 
-    display: flex;
+  gap: 6px;
 
-    flex-direction: column;
-
-    gap: 12px;
-
+  box-sizing: border-box;
 }
 
 .popup h2 {
-
-    margin: 0 0 10px;
-
-    text-align: center;
-
+  margin: 0 0 5px;
+  text-align: center;
 }
 
 .popup input,
 .popup select {
+  width: 100%;
 
-    width: 100%;
+  padding: 8px;
 
-    padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 
-    border: 1px solid #ccc;
+  box-sizing: border-box;
 
-    border-radius: 6px;
+  font-size: 14px;
+}
 
-    box-sizing: border-box;
+.popup p {
+  margin: 2px 0;
+}
 
-    font-size: 14px;
-
+.popup label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 .popup hr {
+  width: 100%;
 
-    width: 100%;
+  border: none;
+  border-top: 1px solid #ddd;
 
-    border: none;
-
-    border-top: 1px solid #ddd;
-
-    margin: 5px 0;
-
+  margin: 4px 0;
 }
 
 .buttonAddBook {
+  display: flex;
 
-    display: flex;
+  justify-content: space-between;
 
-    justify-content: space-between;
-
-    margin-top: 10px;
-
+  margin-top: 6px;
 }
 
 .buttonAddBook button {
+  width: 48%;
 
-    width: 48%;
+  padding: 9px;
 
-    padding: 10px;
+  border: none;
+  border-radius: 6px;
 
-    border: none;
+  cursor: pointer;
 
-    border-radius: 6px;
-
-    cursor: pointer;
-
-    font-weight: bold;
-
+  font-weight: bold;
 }
 
 .buttonAddBook button:first-child {
-
-    background: #2563eb;
-
-    color: white;
-
+  background: #2563eb;
+  color: white;
 }
 
 .buttonAddBook button:last-child {
+  background: #dc2626;
+  color: white;
+}
 
-    background: #dc2626;
+/* Thanh cuộn */
+.popup::-webkit-scrollbar {
+  width: 7px;
+}
 
-    color: white;
+.popup::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 10px;
+}
 
+.popup::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
