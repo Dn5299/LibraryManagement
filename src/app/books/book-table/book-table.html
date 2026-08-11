@@ -1,63 +1,6 @@
-<table class="table" border="1">
-
-    <thead>
-
-        <tr>
-
-            <th>Mã sách</th>
-            <th>Tên sách</th>
-            <th>Tác giả</th>
-            <th>Danh mục</th>
-            <th>Năm xuất bản</th>
-            <th>Số lượng</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-
-        </tr>
-
-    </thead>
-
-    <tbody>
-
-        @for (book of books(); track book.id) {
-
-        <tr>
-
-            <td>B{{ book.id.toString().padStart(4,'0') }}</td>
-
-            <td>{{ book.title }}</td>
-
-            <td>{{ book.author }}</td>
-
-            <td>{{ book.category }}</td>
-
-            <td>{{ book.year }}</td>
-
-            <td>{{ book.quantity }}</td>
-
-            <td 
-            appStatusColor
-            [status]="book.status"
-            >
-            {{ book.status }}
-            </td>
-
-            <td>
-
-                <button (click)="edit.emit(book)">
-                    Sửa
-                </button>
-
-                <button (click)="delete.emit(book)">
-                    Xóa
-                </button>
-
-            </td>
-
-        </tr>
-
-        }
-
-    </tbody>
-
-</table>
+<app-common-table
+  [data]="books()"
+  [columns]="columns"
+  (edit)="edit.emit($event)"
+  (delete)="delete.emit($event)">
+</app-common-table>

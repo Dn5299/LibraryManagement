@@ -1,0 +1,37 @@
+<table class="table" border="1">
+
+  <thead>
+    <tr>
+      @for (column of columns(); track column.key) {
+        <th>{{ column.label }}</th>
+      }
+
+      <th>Thao tác</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (item of data(); track $index) {
+
+      <tr>
+
+        @for (column of columns(); track column.key) {
+          <td>{{ item[column.key] }}</td>
+        }
+
+        <td>
+          <button (click)="edit.emit(item)">
+            Sửa
+          </button>
+
+          <button (click)="delete.emit(item)">
+            Xóa
+          </button>
+        </td>
+
+      </tr>
+
+    }
+  </tbody>
+
+</table>
