@@ -1,6 +1,6 @@
 @if (visible()) {
 
-<div class="popup">
+<div class="popup" [formGroup]="form()">
 
     <h2>
         {{ selectedBook() ? 'Sửa sách' : 'Thêm sách' }}
@@ -9,48 +9,54 @@
     <input
         type="text"
         placeholder="Tên sách"
-        [ngModel]="title()"
-        (ngModelChange)="titleChange.emit($event)"
+        formControlName="title"
     >
+    @if (form().get('title')?.invalid && form().get('title')?.touched) {
+    <small>Tên sách không được để trống</small>
+}
 
     <input
         type="text"
         placeholder="Tác giả"
-        [ngModel]="author()"
-        (ngModelChange)="authorChange.emit($event)"
+        formControlName="author"
     >
 
     <input
         type="text"
         placeholder="Danh mục"
-        [ngModel]="category()"
-        (ngModelChange)="categoryChange.emit($event)"
+        formControlName="category"
     >
 
     <input
-        type="text"
+        type="number"
         placeholder="Năm xuất bản"
-        [ngModel]="year()"
-        (ngModelChange)="yearChange.emit($event)"
+        formControlName="year"
     >
+    @if (form().get('year')?.invalid && form().get('year')?.touched) {
+    <small>Năm xuất bản không hợp lệ</small>
+}
 
     <input
-        type="text"
+        type="number"
         placeholder="Số lượng"
-        [ngModel]="quantity()"
-        (ngModelChange)="quantityChange.emit($event)"
+        formControlName="quantity"
     >
+    @if (form().get('quantity')?.invalid && form().get('quantity')?.touched) {
+    <small>Số lượng phải là số nguyên lớn hơn 0</small>
+}
 
     <input
         type="text"
         placeholder="Trạng thái"
-        [ngModel]="status()"
-        (ngModelChange)="statusChange.emit($event)"
+        formControlName="status"
     >
 
     <div class="buttonAddBook">
 
-        <button (click)="save.emit()">
+        <button
+            [disabled]="form().invalid"
+            (click)="save.emit()"
+        >
             Lưu
         </button>
 

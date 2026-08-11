@@ -6,8 +6,8 @@
         class="search"
         type="text"
         placeholder="Tìm kiếm sách..."
-        [ngModel]="searchText()"
-        (ngModelChange)="searchText.set($event)"
+        [value]="searchText()"
+        (input)="searchText.set($any($event.target).value)"
     >
 
     <button
@@ -22,30 +22,15 @@
 <br>
 
 <app-book-table
-  [books]="filteredBooks()"
-  (edit)="editBook($event)"
-  (delete)="deleteBook($event)">
+    [books]="filteredBooks()"
+    (edit)="editBook($event)"
+    (delete)="deleteBook($event)">
 </app-book-table>
 
-
 <app-book-form
-  [visible]="showAddForm()"
-  [selectedBook]="selectedBook()"
-
-  [title]="newTitle"
-  [author]="newAuthor"
-  [category]="newCategory"
-  [year]="newYear"
-  [quantity]="newQuantity"
-  [status]="newStatus"
-
-  (titleChange)="newTitle = $event"
-  (authorChange)="newAuthor = $event"
-  (categoryChange)="newCategory = $event"
-  (yearChange)="newYear = $event"
-  (quantityChange)="newQuantity = $event"
-  (statusChange)="newStatus = $event"
-
-  (save)="saveBook()"
-  (close)="closeForm()">
+    [visible]="showAddForm()"
+    [selectedBook]="selectedBook()"
+    [form]="bookForm"
+    (save)="saveBook()"
+    (close)="closeForm()">
 </app-book-form>

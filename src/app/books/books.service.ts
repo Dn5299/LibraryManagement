@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { from, map, Observable} from 'rxjs';
 import { supabase } from '../supabase';
 import { Book } from './books.model';
 
@@ -7,73 +8,125 @@ import { Book } from './books.model';
 })
 export class BooksService {
 
-  async getBooks(): Promise<Book[]> {
+  getBooks(): Observable<Book[]> {
 
-    const { data, error } = await supabase
-      .from('books')
-      .select('*')
-      .order('id', { ascending: true });
+    return from(
 
-    if (error) {
-      console.error(error);
-      return [];
-    }
+      supabase
+        .from('books')
+        .select('*')
+        .order('id', { ascending: true })
 
-    return (data ?? []) as Book[];
+    ).pipe(
 
-  }
+      map(({ data, error }) => {
 
-  async addBook(book: Omit<Book, 'id'>): Promise<boolean> {
+        if (error) {
 
-    const { error } = await supabase
-      .from('books')
-      .insert([book]);
+          console.error(error);
 
-    if (error) {
-      console.error(error);
-      return false;
-    }
+          return [];
 
-    return true;
+        }
 
-  }
+        return (data ?? []) as Book[];
 
-  async updateBook(book: Book): Promise<boolean> {
-
-    const { error } = await supabase
-      .from('books')
-      .update({
-        title: book.title,
-        author: book.author,
-        category: book.category,
-        year: book.year,
-        quantity: book.quantity,
-        status: book.status
       })
-      .eq('id', book.id);
 
-    if (error) {
-      console.error(error);
-      return false;
-    }
-
-    return true;
+    );
 
   }
 
-  async deleteBook(id: number): Promise<boolean> {
+  addBook(book: Omit<Book, 'id'>): Observable<boolean> {
 
-    const { error } = await supabase
-      .from('books')
-      .delete()
-      .eq('id', id);
+    return from(
 
-    if (error) {
-      console.error(error);
-      return false;
-    }
+      supabase
+        .from('books')
+        .insert([book])
 
-    return true;
+    ).pipe(
+
+      map(({ error }) => {
+
+        if (error) {
+
+          console.error(error);
+
+          return false;
+
+        }
+
+        return true;
+
+      })
+
+    );
+
+  }
+
+  updateBook(book: Book): Observable<boolean> {
+
+    return from(
+
+      supabase
+        .from('books')
+        .update({
+          title: book.title,
+          author: book.author,
+          category: book.category,
+          year: book.year,
+          quantity: book.quantity,
+          status: book.status
+        })
+        .eq('id', book.id)
+
+    ).pipe(
+
+      map(({ error }) => {
+
+        if (error) {
+
+          console.error(error);
+
+          return false;
+
+        }
+
+        return true;
+
+      })
+
+    );
+
+  }
+
+  deleteBook(id: number): Observable<boolean> {
+
+    return from(
+
+      supabase
+        .from('books')
+        .delete()
+        .eq('id', id)
+
+    ).pipe(
+
+      map(({ error }) => {
+
+        if (error) {
+
+          console.error(error);
+
+          return false;
+
+        }
+
+        return true;
+
+      })
+
+    );
 
   }
 
