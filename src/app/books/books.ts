@@ -13,11 +13,11 @@ import { BookForm } from './book-form/book-form';
 
 import {
   Component,
-  computed,
   inject,
   OnInit,
   signal
 } from '@angular/core';
+
 import { Subject } from 'rxjs';
 import {
   debounceTime,
@@ -43,8 +43,12 @@ export class Books implements OnInit {
   private readonly fb = inject(FormBuilder);
 
   books = signal<Book[]>([]);
+  filteredBooks = signal<Book[]>([]);
+
   showAddForm = signal(false);
   selectedBook = signal<Book | null>(null);
+
+  searchText$ = new Subject<string>();
 
   bookForm = this.fb.group({
     title: ['', Validators.required],
@@ -73,48 +77,43 @@ export class Books implements OnInit {
     status: ['', Validators.required]
   });
 
-  searchText$ = new Subject<string>();
-
-  filteredBooks = signal<Book[]>([]);
-
   ngOnInit(): void {
 
-  this.loadBooks();
+    this.loadBooks();
 
-  this.searchText$
-    .pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      map(keyword => keyword.trim().toLowerCase())
-    )
-    .subscribe(keyword => {
+    this.searchText$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        map(keyword => keyword.trim().toLowerCase())
+      )
+      .subscribe(keyword => {
 
-      if (!keyword) {
-        this.filteredBooks.set(this.books());
-        return;
-      }
+        if (!keyword) {
+          this.filteredBooks.set(this.books());
+          return;
+        }
 
-      this.filteredBooks.set(
-        this.books().filter(book =>
-          book.title.toLowerCase().includes(keyword)
-        )
-      );
+        this.filteredBooks.set(
+          this.books().filter(book =>
+            book.title.toLowerCase().includes(keyword)
+          )
+        );
 
-    });
+      });
 
-}
+  }
 
   loadBooks(): void {
 
-  this.booksService.getBooks().subscribe(data => {
+    this.booksService.getBooks().subscribe(data => {
 
-    this.books.set(data);
+      this.books.set(data);
+      this.filteredBooks.set(data);
 
-    this.filteredBooks.set(data);
+    });
 
-  });
-
-}
+  }
 
   yearValidator(control: AbstractControl): ValidationErrors | null {
 
@@ -175,74 +174,75 @@ export class Books implements OnInit {
 
   saveBook(): void {
 
-  if (this.bookForm.invalid) {
-    this.bookForm.markAllAsTouched();
-    return;
-  }
-
-  const value = this.bookForm.getRawValue();
-
-  const book = {
-    title: value.title ?? '',
-    author: value.author ?? '',
-    category: value.category ?? '',
-    year: Number(value.year),
-    quantity: Number(value.quantity),
-    status: value.status ?? ''
-  };
-
-  if (this.selectedBook()) {
-
-    this.booksService.updateBook({
-      id: this.selectedBook()!.id,
-      ...book
-    }).subscribe(success => {
-
-      if (!success) {
-        return;
-      }
-
-      this.closeForm();
-      this.loadBooks();
-
-    });
-
-  } else {
-
-    this.booksService.addBook(book).subscribe(success => {
-
-      if (!success) {
-        return;
-      }
-
-      this.closeForm();
-      this.loadBooks();
-
-    });
-
-  }
-
-}
-
-  deleteBook(book: Book): void {
-
-  this.booksService.deleteBook(book.id).subscribe(success => {
-
-    if (!success) {
+    if (this.bookForm.invalid) {
+      this.bookForm.markAllAsTouched();
       return;
     }
 
-    this.loadBooks();
+    const value = this.bookForm.getRawValue();
 
-  });
+    const book = {
+      title: value.title ?? '',
+      author: value.author ?? '',
+      category: value.category ?? '',
+      year: Number(value.year),
+      quantity: Number(value.quantity),
+      status: value.status ?? ''
+    };
 
-}
+    if (this.selectedBook()) {
+
+      this.booksService.updateBook({
+        id: this.selectedBook()!.id,
+        ...book
+      }).subscribe(success => {
+
+        if (!success) {
+          return;
+        }
+
+        this.closeForm();
+        this.loadBooks();
+
+      });
+
+    } else {
+
+      this.booksService.addBook(book).subscribe(success => {
+
+        if (!success) {
+          return;
+        }
+
+        this.closeForm();
+        this.loadBooks();
+
+      });
+
+    }
+
+  }
+
+  deleteBook(book: Book): void {
+
+    this.booksService.deleteBook(book.id).subscribe(success => {
+
+      if (!success) {
+        return;
+      }
+
+      this.loadBooks();
+
+    });
+
+  }
 
   closeForm(): void {
 
     this.showAddForm.set(false);
     this.selectedBook.set(null);
     this.bookForm.reset();
+
   }
 
 }

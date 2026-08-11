@@ -17,11 +17,18 @@
 
         @for (column of columns(); track column.key) {
           <td>
-      @if (column.type === 'money') {
-      {{ item[column.key] | money }}
-      } @else {
-      {{ item[column.key] }} 
-    }
+  @if (column.type === 'status') {
+    <span
+      appStatusColor
+      [status]="item[column.key]"
+    >
+      {{ item[column.key] }}
+    </span>
+  } @else if (column.type === 'money') {
+    {{ item[column.key] | money }}
+  } @else {
+    {{ item[column.key] }}
+  }
 </td>
         }
 
