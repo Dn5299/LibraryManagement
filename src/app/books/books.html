@@ -3,11 +3,10 @@
 <div class="search-section">
 
     <input
-        class="search"
-        type="text"
-        placeholder="Tìm kiếm sách..."
-        [value]="searchText()"
-        (input)="searchText.set($any($event.target).value)"
+    class="search"
+    type="text"
+    placeholder="Tìm kiếm sách..."
+    (input)="searchText$.next($any($event.target).value)"
     >
 
     <button

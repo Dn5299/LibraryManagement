@@ -18,6 +18,12 @@ import {
   OnInit,
   signal
 } from '@angular/core';
+import { Subject } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map
+} from 'rxjs/operators';
 
 @Component({
   selector: 'app-books',
@@ -38,7 +44,6 @@ export class Books implements OnInit {
 
   books = signal<Book[]>([]);
   showAddForm = signal(false);
-  searchText = signal('');
   selectedBook = signal<Book | null>(null);
 
   bookForm = this.fb.group({
@@ -68,28 +73,45 @@ export class Books implements OnInit {
     status: ['', Validators.required]
   });
 
-  filteredBooks = computed(() => {
+  searchText$ = new Subject<string>();
 
-    const keyword = this.searchText().trim().toLowerCase();
-
-    if (!keyword) {
-      return this.books();
-    }
-
-    return this.books().filter(book =>
-      book.title.toLowerCase().includes(keyword)
-    );
-
-  });
+  filteredBooks = signal<Book[]>([]);
 
   ngOnInit(): void {
+
   this.loadBooks();
-  }
+
+  this.searchText$
+    .pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      map(keyword => keyword.trim().toLowerCase())
+    )
+    .subscribe(keyword => {
+
+      if (!keyword) {
+        this.filteredBooks.set(this.books());
+        return;
+      }
+
+      this.filteredBooks.set(
+        this.books().filter(book =>
+          book.title.toLowerCase().includes(keyword)
+        )
+      );
+
+    });
+
+}
 
   loadBooks(): void {
 
   this.booksService.getBooks().subscribe(data => {
+
     this.books.set(data);
+
+    this.filteredBooks.set(data);
+
   });
 
 }
