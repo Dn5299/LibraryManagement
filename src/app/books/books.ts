@@ -10,7 +10,6 @@ import { Book } from './books.model';
 import { BooksService } from './books.service';
 import { BookTable } from './book-table/book-table';
 import { BookForm } from './book-form/book-form';
-import { firstValueFrom } from 'rxjs';
 
 import {
   Component,
@@ -83,18 +82,17 @@ export class Books implements OnInit {
 
   });
 
-  async ngOnInit(): Promise<void> {
-    await this.loadBooks();
+  ngOnInit(): void {
+  this.loadBooks();
   }
 
-  async loadBooks(): Promise<void> {
+  loadBooks(): void {
 
-    const data = await firstValueFrom(
-      this.booksService.getBooks()
-    );
-
+  this.booksService.getBooks().subscribe(data => {
     this.books.set(data);
-  }
+  });
+
+}
 
   yearValidator(control: AbstractControl): ValidationErrors | null {
 
@@ -153,63 +151,70 @@ export class Books implements OnInit {
     this.showAddForm.set(true);
   }
 
-  async saveBook(): Promise<void> {
+  saveBook(): void {
 
-    if (this.bookForm.invalid) {
-      this.bookForm.markAllAsTouched();
-      return;
-    }
+  if (this.bookForm.invalid) {
+    this.bookForm.markAllAsTouched();
+    return;
+  }
 
-    const value = this.bookForm.getRawValue();
+  const value = this.bookForm.getRawValue();
 
-    const book = {
-      title: value.title ?? '',
-      author: value.author ?? '',
-      category: value.category ?? '',
-      year: Number(value.year),
-      quantity: Number(value.quantity),
-      status: value.status ?? ''
-    };
+  const book = {
+    title: value.title ?? '',
+    author: value.author ?? '',
+    category: value.category ?? '',
+    year: Number(value.year),
+    quantity: Number(value.quantity),
+    status: value.status ?? ''
+  };
 
-    let success = false;
+  if (this.selectedBook()) {
 
-    if (this.selectedBook()) {
+    this.booksService.updateBook({
+      id: this.selectedBook()!.id,
+      ...book
+    }).subscribe(success => {
 
-      success = await firstValueFrom(
-        this.booksService.updateBook({
-          id: this.selectedBook()!.id,
-          ...book
-        })
-      );
+      if (!success) {
+        return;
+      }
 
-    } else {
+      this.closeForm();
+      this.loadBooks();
 
-      success = await firstValueFrom(
-        this.booksService.addBook(book)
-      );
+    });
 
-    }
+  } else {
+
+    this.booksService.addBook(book).subscribe(success => {
+
+      if (!success) {
+        return;
+      }
+
+      this.closeForm();
+      this.loadBooks();
+
+    });
+
+  }
+
+}
+
+  deleteBook(book: Book): void {
+
+  this.booksService.deleteBook(book.id).subscribe(success => {
 
     if (!success) {
       return;
     }
 
-    this.closeForm();
-    await this.loadBooks();
-  }
+    this.loadBooks();
 
-  async deleteBook(book: Book): Promise<void> {
+  });
 
-    const success = await firstValueFrom(
-      this.booksService.deleteBook(book.id)
-    );
-
-    if (!success) {
-      return;
-    }
-
-    await this.loadBooks();
-  }
+}
 
   closeForm(): void {
 
